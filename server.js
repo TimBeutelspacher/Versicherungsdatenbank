@@ -11,7 +11,6 @@ var pgClient = new pg.Client(connectionString);
 const db = require("./db/kundendaten");
 
 app.use(bodyParser.json());
-//app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -48,16 +47,6 @@ app.patch("/fall/:fall_id", async(req, res) => {
 //Betrugsrelevante Daten abrufen
 app.get("/betrugsdaten/:vertrags_id", async(req, res) => {
 
-  /* mit einer Funktion
-
-  const daten = await db.getBetrugsrelevanteDaten(req.params.vertrags_id);
-  if(daten.length===0){
-    return res.status(404).json({"message": "Error."});
-  }
-  return res.status(200).json(daten);
-
-*/
-
   // mehrere Methoden
   const Vertragsabschlussdatum = await db.getVertragsabschlussdatum(req.params.vertrags_id);
   const Anzahl_Faelle = await db.getAnzahlFaelle(req.params.vertrags_id);
@@ -65,6 +54,7 @@ app.get("/betrugsdaten/:vertrags_id", async(req, res) => {
   const Anzahl_abgelehnter_Faelle = await db.getAnzahlAbgelehnterFaelle(req.params.vertrags_id);
   const Anzahl_nicht_abgedeckter_Faelle = await db.getAnzahlNichtAbgedeckterFaelle(req.params.vertrags_id);
   const Anzahl_Betrug_Faelle = await db.getAnzahlBetrugFaelle(req.params.vertrags_id);
+  const Anzahl_Laufender_Faelle = await db.getAnzahlLaufenderFaelle(req.params.vertrags_id);
 
   const daten = {
     Vertragabschlussdatum: Vertragsabschlussdatum[0].Vertragsabschlussdatum,
@@ -72,10 +62,10 @@ app.get("/betrugsdaten/:vertrags_id", async(req, res) => {
     Anzahl_abgeschlossene_Faelle: Anzahl_abgeschlossene_Faelle[0].count,
     Anzahl_abgelehnter_Faelle: Anzahl_abgelehnter_Faelle[0].count,
     Anzahl_nicht_abgedeckter_Faelle: Anzahl_nicht_abgedeckter_Faelle[0].count,
-    Anzahl_Betrug_Faelle: Anzahl_Betrug_Faelle[0].count
+    Anzahl_Betrug_Faelle: Anzahl_Betrug_Faelle[0].count,
+    Anzahl_Laufender_Faelle: Anzahl_Laufender_Faelle[0].count
   }
   return res.status(200).json(daten);
-  
 })
 
 
@@ -86,24 +76,6 @@ app.get("/werkstatt/:PLZ", async(req, res) => {
   }
   return res.status(200).json({werkstatt})
 })
-
-
-
-/*
-app.post("/vertrag", async(req, res) => {
-  const results = await db.createFall(req.body);
-  res.status(201).json({id: results[0]});
-})
-
-
-
-app.get("/vertrag", async(req, res) =>{
-  const vertraege = await db.getAllVertraege();
-  res.status(200).json({vertraege})
-})
-*/
-
-
 
 
 /*
