@@ -16,9 +16,7 @@
     "body-parser": "^1.19.1",
     "express": "^4.17.2",
     "knex": "^0.95.15",
-    "npm-install-missing": "^0.1.4",
-    "pg": "^8.7.1",
-    "sqlite3": "^5.0.2"
+    "pg": "^8.7.1"
   },
   "description": ""
 }
